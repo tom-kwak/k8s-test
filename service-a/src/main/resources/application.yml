@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: service-a
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
+      loadbalancer:
+        mode: service
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: FULL
+
+server:
+  port: 8080
+
+
+logging:
+  level:
+    feign: DEBUG

@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    ingressClass: "nginx"
+spec:
+  rules:
+    - host: "my-test.com"
+      http:
+        paths:
+          - path: /service-a
+            pathType: Prefix
+            backend:
+              service:
+                name: service-a
+                port:
+                  number: 8080
+          - path: /service-b
+            pathType: Prefix
+            backend:
+              service:
+                name: service-b
+                port:
+                  number: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-controller
+spec:
+  selector:
+    service: app
+  ports:
+    - name: http
+      port: 80   # 외부에서 접근할 HTTP 포트
+      targetPort: 80
+  type: LoadBalancer
+
