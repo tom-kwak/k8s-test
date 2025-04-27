@@ -7,7 +7,7 @@ spring:
         enabled: true
         all-namespaces: true
       loadbalancer:
-        mode: service
+        mode: pod
 feign:
   client:
     config:
@@ -15,11 +15,14 @@ feign:
         connectTimeout: 5000
         readTimeout: 5000
         loggerLevel: FULL
+      log-client:
+        loggerLevel: FULL
 
 server:
   port: 8080
 
-
 logging:
   level:
+    com.autoever: DEBUG
     feign: DEBUG
+

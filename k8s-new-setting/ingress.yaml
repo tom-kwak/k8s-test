@@ -1,3 +1,4 @@
+# https://kubernetes.io/ko/docs/concepts/services-networking/ingress/
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -10,16 +11,19 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "my-test.com"
+    - host: "localhost" # 외부 노출되는 domain
       http:
         paths:
+          # Path 기반 라우팅
           - path: /service-a(/|$)(.*)
+            # ImplementationSpecific https://docs.nginx.com/nginx-ingress-controller/configuration/ingress-resources/basic-configuration/
+            # Prefix
             pathType: ImplementationSpecific
-            backend:
+            backend: # Routing to service-a
               service:
                 name: service-a
                 port:
-                  number: 8080
+                  number: 8080 # Servie Port
           - path: /service-b(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
@@ -29,14 +33,5 @@ spec:
                   number: 8080
 
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: ingress-nginx-controller
-spec:
-  ports:
-    - name: http
-      port: 9999   # 외부에서 접근할 HTTP 포트
-      targetPort: 80
-  type: LoadBalancer
-
+# https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+# https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
